@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String
+  password  String
+  role      UserRole  @default(ADMIN)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  blogs     Blog[]
+  projects  Project[]
+
+  @@map("users")
+}
+
+model Blog {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  excerpt   String?
+  slug      String   @unique
+  published Boolean  @default(false)
+  imageUrl  String?
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("blogs")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  content     String
+  imageUrl    String?
+  liveUrl     String?
+  githubUrl   String?
+  featured    Boolean  @default(false)
+  tags        String[]
+  slug        String   @unique
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("projects")
+}
+
+model About {
+  id         String   @id @default("about")
+  name       String
+  bio        String
+  email      String
+  phone      String?
+  location   String?
+  imageUrl   String?
+  skills     String[]
+  experience Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("about")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}

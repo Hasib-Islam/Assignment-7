@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "npm install",
+  "functions": {
+    "app/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "NEXT_PUBLIC_API_URL": "@next_public_api_url",
+    "BACKEND_URL": "@backend_url"
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "@backend_url/api/$1"
+    }
+  ]
+}
