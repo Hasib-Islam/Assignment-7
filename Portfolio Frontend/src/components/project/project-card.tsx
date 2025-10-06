@@ -28,7 +28,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
     try {
       if (imageUrl.startsWith('/')) {
-        imageUrl = `http://localhost:5000${imageUrl}`;
+        imageUrl = `https://portfolio-backend-six-mu.vercel.app${imageUrl}`;
       } else if (
         !imageUrl.startsWith('http://') &&
         !imageUrl.startsWith('https://') &&

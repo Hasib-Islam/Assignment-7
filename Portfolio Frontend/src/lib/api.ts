@@ -12,7 +12,7 @@ interface User {
 const API_BASE_URL =
   process.env.NODE_ENV === 'production'
     ? process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') ||
-      'https://your-backend-app.vercel.app'
+      'https://portfolio-backend-six-mu.vercel.app'
     : 'http://localhost:5000';
 
 async function apiFetch<T>(

@@ -2,7 +2,11 @@
 const nextConfig = {
   serverExternalPackages: ['@uiw/react-md-editor'],
   images: {
-    domains: ['res.cloudinary.com', 'localhost:5000', 'localhost:3000'],
+    domains: [
+      'res.cloudinary.com',
+      'https://portfolio-backend-six-mu.vercel.app',
+      'localhost:3000',
+    ],
     remotePatterns: [
       {
         protocol: 'https',

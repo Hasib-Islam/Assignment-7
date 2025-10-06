@@ -27,7 +27,7 @@ export default function BlogCard({ blog }: BlogCardProps) {
 
     try {
       if (imageUrl.startsWith('/')) {
-        imageUrl = `http://localhost:5000${imageUrl}`;
+        imageUrl = `https://portfolio-backend-six-mu.vercel.app${imageUrl}`;
       } else if (
         !imageUrl.startsWith('http://') &&
         !imageUrl.startsWith('https://') &&
