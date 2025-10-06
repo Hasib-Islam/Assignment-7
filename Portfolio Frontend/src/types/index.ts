@@ -57,6 +57,25 @@ export interface Experience {
   description: string;
 }
 
+export interface ProjectCard {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl?: string;
+  technologies: string[];
+  githubUrl?: string;
+  liveUrl?: string;
+}
+
+export interface BlogCard {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl?: string;
+  createdAt: string;
+  slug: string;
+}
+
 export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;

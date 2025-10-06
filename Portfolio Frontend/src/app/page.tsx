@@ -4,35 +4,45 @@ import ProjectGrid from '@/components/project/project-grid';
 import BlogList from '@/components/blog/blog-list';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Blog, Project, BlogsResponse } from '@/types';
 
 export default async function HomePage() {
-  const [featuredProjectsResponse, recentBlogsResponse] = await Promise.all([
-    api.projects.getFeatured(),
-    api.blogs.getAll(1, 3),
-  ]);
+  let featuredProjects: Project[] = [];
+  let recentBlogs: Blog[] = [];
 
-  const featuredProjects = featuredProjectsResponse.data || [];
+  try {
+    const [featuredProjectsResponse, recentBlogsResponse] =
+      await Promise.allSettled([
+        api.projects.getFeatured(),
+        api.blogs.getAll(1, 3),
+      ]);
 
-  const recentBlogs = recentBlogsResponse.data || [];
+    if (
+      featuredProjectsResponse.status === 'fulfilled' &&
+      featuredProjectsResponse.value.success &&
+      featuredProjectsResponse.value.data
+    ) {
+      featuredProjects = Array.isArray(featuredProjectsResponse.value.data)
+        ? featuredProjectsResponse.value.data
+        : [];
+    }
 
-  const mappedBlogs = recentBlogs.map((blog) => ({
-    id: blog.id,
-    title: blog.title,
-    description: blog.excerpt,
-    imageUrl: blog.imageUrl,
-    createdAt: blog.createdAt,
-    slug: blog.slug,
-  }));
+    if (
+      recentBlogsResponse.status === 'fulfilled' &&
+      recentBlogsResponse.value.success &&
+      recentBlogsResponse.value.data
+    ) {
+      const blogsData = recentBlogsResponse.value.data;
 
-  const mappedProjects = featuredProjects.map((project) => ({
-    id: project.id,
-    title: project.title,
-    description: project.description,
-    imageUrl: project.imageUrl,
-    technologies: project.tags,
-    githubUrl: project.githubUrl,
-    liveUrl: project.liveUrl,
-  }));
+      if (blogsData && 'blogs' in blogsData) {
+        recentBlogs = (blogsData as BlogsResponse).blogs || [];
+      } else if (Array.isArray(blogsData)) {
+        recentBlogs = blogsData;
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching data for home page:', error);
+  }
 
   return (
     <>
@@ -51,7 +61,7 @@ export default async function HomePage() {
               <Link href="/projects">View All Projects</Link>
             </Button>
           </div>
-          <ProjectGrid projects={mappedProjects} />
+          <ProjectGrid projects={featuredProjects} />
         </div>
       </section>
 
@@ -68,7 +78,7 @@ export default async function HomePage() {
               <Link href="/blogs">View All Blogs</Link>
             </Button>
           </div>
-          <BlogList blogs={mappedBlogs} />
+          <BlogList blogs={recentBlogs} />
         </div>
       </section>
     </>

@@ -5,13 +5,15 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Blog } from '@/types';
 import Image from 'next/image';
 
-interface PageProps {
-  params: { slug: string };
-}
+export default async function BlogPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
 
-export default async function BlogPage({ params }: PageProps) {
   try {
-    const blogResponse = await api.blogs.getBySlug(params.slug);
+    const blogResponse = await api.blogs.getBySlug(slug);
 
     if (!blogResponse.success || !blogResponse.data) {
       notFound();
@@ -75,11 +77,10 @@ export async function generateStaticParams() {
       return [];
     }
 
-    const blogs = (blogsResponse.data as any).blogs || blogsResponse.data || [];
-
-    if (!Array.isArray(blogs)) {
-      return [];
-    }
+    const responseData = blogsResponse.data as { blogs?: Blog[] } | Blog[];
+    const blogs = Array.isArray(responseData)
+      ? responseData
+      : responseData.blogs || [];
 
     return blogs.map((blog: Blog) => ({
       slug: blog.slug,
@@ -92,9 +93,15 @@ export async function generateStaticParams() {
 
 export const revalidate = 60;
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
   try {
-    const blogResponse = await api.blogs.getBySlug(params.slug);
+    const blogResponse = await api.blogs.getBySlug(slug);
 
     if (!blogResponse.success || !blogResponse.data) {
       return {
@@ -117,7 +124,7 @@ export async function generateMetadata({ params }: PageProps) {
         authors: [blog.author.name],
       },
     };
-  } catch (error) {
+  } catch {
     return {
       title: 'Blog Post',
       description: 'Personal blog post',

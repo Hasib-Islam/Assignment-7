@@ -13,14 +13,18 @@ import { Edit, Eye, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 import { DeleteBlogButton } from '@/components/dashboard/delete-blog-button';
+import { Blog } from '@/types';
 
 export default async function DashboardBlogsPage() {
   try {
     const response = await api.blogs.getAll(1, 50);
 
-    let blogs = [];
+    let blogs: Blog[] = [];
     if (response.success && response.data) {
-      blogs = (response.data as any).blogs || response.data || [];
+      const responseData = response.data as { blogs?: Blog[] } | Blog[];
+      blogs = Array.isArray(responseData)
+        ? responseData
+        : responseData.blogs || [];
     }
 
     return (

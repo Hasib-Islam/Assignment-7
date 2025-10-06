@@ -6,8 +6,53 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 import { About } from '@/types';
 import Image from 'next/image';
 
+const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
+
 export default async function AboutPage() {
-  const aboutResponse = await api.about.get();
+  if (isBuildTime) {
+    return (
+      <div className="container py-16">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">About</h1>
+          <p className="text-muted-foreground mt-2">
+            About information will be available after deployment.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  let aboutResponse;
+
+  try {
+    aboutResponse = await api.about.get();
+  } catch (error) {
+    console.error('Error fetching about data:', error);
+    return (
+      <div className="container py-16">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">About</h1>
+          <p className="text-muted-foreground mt-2">
+            Failed to load about information. Please try again later.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!aboutResponse.success || !aboutResponse.data) {
+    return (
+      <div className="container py-16">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">About</h1>
+          <p className="text-muted-foreground mt-2">
+            About information not found.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const about: About = aboutResponse.data;
 
   return (

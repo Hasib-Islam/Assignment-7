@@ -8,7 +8,7 @@ export function Hero() {
         <div className="text-center space-y-8">
           <div className="space-y-4">
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tight">
-              Hi, I'm Hasib
+              Hi, I&apos;m Hasib
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Building modern web applications with React, Next.js, and

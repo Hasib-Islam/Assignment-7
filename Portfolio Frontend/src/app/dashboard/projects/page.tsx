@@ -13,10 +13,21 @@ import { Edit, ExternalLink, Github, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 import { DeleteProjectButton } from '@/components/dashboard/delete-project-button';
+import { Project } from '@/types';
+
+export const dynamic = 'force-dynamic';
 
 export default async function DashboardProjectsPage() {
-  const response = await api.projects.getAll();
-  const projects = response.data || [];
+  let projects: Project[] = [];
+
+  try {
+    const response = await api.projects.getAll();
+    if (response.success && response.data) {
+      projects = Array.isArray(response.data) ? response.data : [];
+    }
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+  }
 
   return (
     <div className="space-y-6">
@@ -47,7 +58,7 @@ export default async function DashboardProjectsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {projects.map((project) => (
+            {projects.map((project: Project) => (
               <TableRow key={project.id}>
                 <TableCell className="font-medium">{project.title}</TableCell>
                 <TableCell>
@@ -57,7 +68,7 @@ export default async function DashboardProjectsPage() {
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-1 flex-wrap">
-                    {project.tags.slice(0, 2).map((tag) => (
+                    {project.tags.slice(0, 2).map((tag: string) => (
                       <Badge key={tag} variant="outline" className="text-xs">
                         {tag}
                       </Badge>
@@ -109,6 +120,18 @@ export default async function DashboardProjectsPage() {
             ))}
           </TableBody>
         </Table>
+
+        {projects.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">No projects found.</p>
+            <Button asChild className="mt-4">
+              <Link href="/dashboard/projects/new">
+                <Plus className="w-4 h-4 mr-2" />
+                Create Your First Project
+              </Link>
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

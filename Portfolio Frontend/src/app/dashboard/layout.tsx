@@ -3,6 +3,8 @@ import { DashboardHeader } from '@/components/dashboard/header';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ProtectedRoute } from '@/components/protected-route';
 
+export const dynamic = 'force-dynamic';
+
 export default function DashboardLayout({
   children,
 }: {
