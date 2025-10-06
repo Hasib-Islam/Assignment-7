@@ -1,4 +1,4 @@
-import { prisma } from '../../lib/prisma';
+import prisma from '../../lib/prisma';
 import { CreateProjectInput, UpdateProjectInput } from './project.routes';
 
 const getAllProjects = async (page: number = 1, limit: number = 10) => {

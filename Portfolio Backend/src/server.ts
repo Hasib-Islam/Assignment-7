@@ -1,5 +1,5 @@
 import app from './app';
-import { prisma } from './lib/prisma';
+import prisma from './lib/prisma';
 import { logger } from './utils/logger';
 
 const PORT = process.env.PORT || 5000;

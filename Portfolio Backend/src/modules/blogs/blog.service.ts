@@ -1,4 +1,4 @@
-import { prisma } from '../../lib/prisma';
+import prisma from '../../lib/prisma';
 import { CreateBlogInput, UpdateBlogInput } from './blog.routes';
 
 const getAllBlogs = async (page: number = 1, limit: number = 10) => {

@@ -2,14 +2,16 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/index.js",
+      "src": "dist/server.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/dist/index.js"
+      "dest": "/dist/server.js"
     }
-  ]
+  ],
+  "installCommand": "npm install && npx prisma generate",
+  "buildCommand": "npm run build"
 }

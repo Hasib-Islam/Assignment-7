@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { prisma } from '../lib/prisma';
+import prisma from '../lib/prisma';
 import { sendResponse } from '../utils/sendResponse';
 import httpStatus from 'http-status-codes';
 

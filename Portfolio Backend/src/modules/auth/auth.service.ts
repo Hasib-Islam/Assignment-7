@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { prisma } from '../../lib/prisma';
+import prisma from '../../lib/prisma';
 import { LoginInput } from './auth.routes';
 
 const login = async (credentials: LoginInput) => {
