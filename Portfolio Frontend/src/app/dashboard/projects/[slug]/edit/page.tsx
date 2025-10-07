@@ -2,13 +2,15 @@ import { api } from '@/lib/api';
 import { ProjectForm } from '@/components/project/project-form';
 import { notFound } from 'next/navigation';
 
-interface PageProps {
-  params: { slug: string };
-}
+export default async function EditProjectPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
 
-export default async function EditProjectPage({ params }: PageProps) {
   try {
-    const projectResponse = await api.projects.getBySlug(params.slug);
+    const projectResponse = await api.projects.getBySlug(slug);
 
     if (!projectResponse.success || !projectResponse.data) {
       notFound();

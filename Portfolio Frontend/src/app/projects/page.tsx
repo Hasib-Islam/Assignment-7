@@ -2,20 +2,29 @@ import { api } from '@/lib/api';
 import ProjectGrid from '@/components/project/project-grid';
 import { Project } from '@/types';
 
-const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
+export const dynamic = 'force-dynamic';
 
 export default async function ProjectsPage() {
   let projects: Project[] = [];
 
-  if (!isBuildTime) {
-    try {
-      const response = await api.projects.getAll();
-      if (response.success && response.data) {
-        projects = Array.isArray(response.data) ? response.data : [];
+  try {
+    const response = await api.projects.getAll();
+
+    if (response.success && response.data) {
+      const projectsData = response.data;
+
+      if (Array.isArray(projectsData)) {
+        projects = projectsData;
+      } else if (
+        projectsData &&
+        'data' in projectsData &&
+        Array.isArray(projectsData.data)
+      ) {
+        projects = projectsData.data;
       }
-    } catch (error) {
-      console.error('Error fetching projects:', error);
     }
+  } catch (error) {
+    console.error('Error fetching projects:', error);
   }
 
   return (

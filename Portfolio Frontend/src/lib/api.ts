@@ -11,9 +11,9 @@ interface User {
 
 const API_BASE_URL =
   process.env.NODE_ENV === 'production'
-    ? process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') ||
-      'https://portfolio-backend-six-mu.vercel.app'
-    : 'http://localhost:5000';
+    ? process.env.NEXT_PUBLIC_API_URL ||
+      'https://portfolio-backend-six-mu.vercel.app/api'
+    : 'http://localhost:5000/api';
 
 async function apiFetch<T>(
   endpoint: string,
@@ -92,10 +92,10 @@ export const api = {
       getServerData<BlogsResponse>(
         `/blogs?page=${page}&limit=${limit}`,
         ['blogs'],
-        3600
+        60
       ),
     getBySlug: (slug: string) =>
-      getServerData<Blog>(`/blogs/slug/${slug}`, [`blog-${slug}`], 3600),
+      getServerData<Blog>(`/blogs/slug/${slug}`, [`blog-${slug}`], 60),
     create: (data: Omit<Blog, 'id' | 'author' | 'createdAt' | 'updatedAt'>) =>
       clientFetch<Blog>('/blogs', {
         method: 'POST',
@@ -110,19 +110,15 @@ export const api = {
   },
   projects: {
     getAll: () =>
-      getServerData<ApiResponse<Project[]>>('/projects', ['projects'], 3600),
+      getServerData<ApiResponse<Project[]>>('/projects', ['projects'], 60),
     getFeatured: () =>
       getServerData<ApiResponse<Project[]>>(
         '/projects/featured',
         ['featured-projects'],
-        3600
+        60
       ),
     getBySlug: (slug: string) =>
-      getServerData<Project>(
-        `/projects/slug/${slug}`,
-        [`project-${slug}`],
-        3600
-      ),
+      getServerData<Project>(`/projects/slug/${slug}`, [`project-${slug}`], 60),
     create: (
       data: Omit<Project, 'id' | 'author' | 'createdAt' | 'updatedAt'>
     ) =>

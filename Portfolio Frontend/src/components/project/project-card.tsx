@@ -9,7 +9,7 @@ interface ProjectCardProps {
     title: string;
     description?: string;
     imageUrl?: string;
-    technologies?: string[];
+    tags?: string[];
     githubUrl?: string;
     liveUrl?: string;
   };
@@ -27,6 +27,10 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     let imageUrl = project.imageUrl;
 
     try {
+      if (imageUrl.includes('res-console.cloudinary.com')) {
+        return imageUrl;
+      }
+
       if (imageUrl.startsWith('/')) {
         imageUrl = `https://portfolio-backend-six-mu.vercel.app${imageUrl}`;
       } else if (
@@ -84,7 +88,10 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             setImageLoading(false);
           }}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          unoptimized={imageSrc.startsWith('data:image/svg+xml')}
+          unoptimized={
+            imageSrc.startsWith('data:image/svg+xml') ||
+            imageSrc.includes('res-console.cloudinary.com')
+          }
         />
         {imageLoading && !imageError && (
           <div className="absolute inset-0 flex items-center justify-center bg-muted">
@@ -102,9 +109,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {project.description || 'No description available'}
         </p>
 
-        {project.technologies && project.technologies.length > 0 && (
+        {project.tags && project.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
-            {project.technologies.map((tech) => (
+            {project.tags.map((tech) => (
               <span
                 key={tech}
                 className="px-2 py-1 bg-primary/10 text-primary text-sm rounded"

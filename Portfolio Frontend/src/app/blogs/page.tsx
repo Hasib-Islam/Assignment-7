@@ -2,12 +2,35 @@ import { api } from '@/lib/api';
 import BlogList from '@/components/blog/blog-list';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Blog } from '@/types';
+
+interface BlogsApiResponse {
+  data?: Blog[];
+  blogs?: Blog[];
+  meta?: unknown;
+}
 
 export default async function BlogsPage() {
-  let blogs = [];
+  let blogs: Blog[] = [];
+
   try {
     const response = await api.blogs.getAll();
-    blogs = response.data || [];
+
+    if (response.success && response.data) {
+      const blogsData = response.data;
+
+      if (Array.isArray(blogsData)) {
+        blogs = blogsData;
+      } else {
+        const data = blogsData as BlogsApiResponse;
+
+        if ('blogs' in data && Array.isArray(data.blogs)) {
+          blogs = data.blogs;
+        } else if ('data' in data && Array.isArray(data.data)) {
+          blogs = data.data;
+        }
+      }
+    }
   } catch (error) {
     console.error('Error fetching blogs:', error);
   }
