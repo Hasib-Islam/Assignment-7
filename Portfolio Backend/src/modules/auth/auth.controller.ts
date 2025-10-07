@@ -11,14 +11,14 @@ const login = async (req: Request, res: Response) => {
     res.cookie('accessToken', result.tokens.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.cookie('refreshToken', result.tokens.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'none',
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
@@ -44,8 +44,14 @@ const login = async (req: Request, res: Response) => {
 
 const logout = async (req: Request, res: Response) => {
   try {
-    res.clearCookie('accessToken');
-    res.clearCookie('refreshToken');
+    res.clearCookie('accessToken', {
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+    });
+    res.clearCookie('refreshToken', {
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+    });
 
     sendResponse(res, {
       success: true,

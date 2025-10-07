@@ -70,7 +70,8 @@ async function main() {
       description: 'A full-stack e-commerce solution with React and Node.js',
       content: 'Detailed description of the e-commerce platform...',
       slug: 'ecommerce-platform',
-      imageUrl: '/images/ecommerce.jpg',
+      imageUrl:
+        'https://res-console.cloudinary.com/drtdlsnmp/thumbnails/v1/image/upload/v1759661708/cG9ydGZvbGlvL3NkaHRpd2h1ZW1pd3ZuMHdyY2p1/drilldown',
       liveUrl: 'https://demo-ecommerce.example.com',
       githubUrl: 'https://github.com/username/ecommerce',
       featured: true,
@@ -82,7 +83,8 @@ async function main() {
       description: 'A collaborative task management application',
       content: 'Detailed description of the task management app...',
       slug: 'task-manager',
-      imageUrl: '/images/taskapp.jpg',
+      imageUrl:
+        'https://res-console.cloudinary.com/drtdlsnmp/thumbnails/v1/image/upload/v1759661693/cG9ydGZvbGlvL3IzdWZ5YnVvbnd4am5pNnZmd2F0/drilldown',
       liveUrl: 'https://demo-tasks.example.com',
       githubUrl: 'https://github.com/username/taskapp',
       featured: false,
